@@ -11,10 +11,6 @@ ifeq "$(wildcard $(BUILD) )" ""
 	BUILD := $(abspath $(BASEDIR)/../../..)
 endif
 
-ERTS_INCLUDE_DIR ?= $(shell erl -noshell -s init stop -eval "io:format(\"~ts/erts-~ts/include/\", [code:root_dir(), erlang:system_info(version)]).")
-ERL_INTERFACE_INCLUDE_DIR ?= $(shell erl -noshell -s init stop -eval "io:format(\"~ts\", [code:lib_dir(erl_interface, include)]).")
-ERL_INTERFACE_LIB_DIR ?= $(shell erl -noshell -s init stop -eval "io:format(\"~ts\", [code:lib_dir(erl_interface, lib)]).")
-
 # eport_c and cJSON libraries
 EPORT_C_INCLUDE_DIR ?= $(BUILD)/default/lib/eport_c/priv/include
 EPORT_C_LIB_DIR ?= $(BUILD)/default/lib/eport_c/priv
@@ -48,10 +44,10 @@ else ifeq ($(UNAME_SYS), Linux)
 	CXXFLAGS ?= -O3 -finline-functions -Wall
 endif
 
-CFLAGS += -fPIC -I $(ERTS_INCLUDE_DIR) -I $(ERL_INTERFACE_INCLUDE_DIR) -I $(CJSON_INCLUDE_DIR) -I $(EPORT_C_INCLUDE_DIR) -I $(CLIENT_INCLUDE_DIR) -I $(LIBPLC_INCLUDE_DIR) -I $(BASE64_INCLUDE_DIR)
-CXXFLAGS += -fPIC -I $(ERTS_INCLUDE_DIR) -I $(ERL_INTERFACE_INCLUDE_DIR) -I $(CJSON_INCLUDE_DIR) -I $(EPORT_C_INCLUDE_DIR) -I $(CLIENT_INCLUDE_DIR) -I $(LIBPLC_INCLUDE_DIR) -I $(BASE64_INCLUDE_DIR)
+CFLAGS += -fPIC -I $(CJSON_INCLUDE_DIR) -I $(EPORT_C_INCLUDE_DIR) -I $(CLIENT_INCLUDE_DIR) -I $(LIBPLC_INCLUDE_DIR) -I $(BASE64_INCLUDE_DIR)
+CXXFLAGS += -fPIC -I $(CJSON_INCLUDE_DIR) -I $(EPORT_C_INCLUDE_DIR) -I $(CLIENT_INCLUDE_DIR) -I $(LIBPLC_INCLUDE_DIR) -I $(BASE64_INCLUDE_DIR)
 
-LDLIBS += -L $(ERL_INTERFACE_LIB_DIR) -L $(EPORT_C_LIB_DIR) -leport_c -lerl_interface -lei -lcjson -lcjson_utils -L $(LIBPLC_LIB_DIR) -l:libplctag.a -lpthread
+LDLIBS += -L $(EPORT_C_LIB_DIR) -leport_c -lcjson -lcjson_utils -L $(LIBPLC_LIB_DIR) -l:libplctag.a -lpthread
 
 # Verbosity.
 
